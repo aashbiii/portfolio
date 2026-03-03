@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Projects{% endblock %}
+
+{% block content %}
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-tag">My Work</div>
+    <h1 class="section-title">Featured <span>Projects</span></h1>
+    <p class="section-desc">Real-world applications built with passion and purpose.</p>
+    <div class="neon-line"></div>
+  </div>
+
+  <div class="projects-grid">
+    {% for project in projects %}
+    <div class="glass-card project-card reveal" style="--delay:{{ loop.index0 * 0.15 }}s;">
+
+      <!-- Icon -->
+      <div class="project-icon-wrap" style="background:rgba({{ '0,212,255' if loop.index is odd else '255,107,53' }},0.08);">
+        <i class="{{ project.icon }}" style="color:{{ project.color }};"></i>
+      </div>
+
+      <!-- Content -->
+      <h3 class="project-title">{{ project.title }}</h3>
+      <p class="project-desc">{{ project.description }}</p>
+
+      <!-- Tech tags -->
+      <div class="tech-tags">
+        {% for tech in project.tech %}
+        <span class="tech-tag">{{ tech }}</span>
+        {% endfor %}
+      </div>
+
+      <!-- Links -->
+      <div class="project-links">
+        <a href="{{ project.github }}" class="project-link" {% if project.github == '#' %}onclick="return false"{% endif %}>
+          <i class="fab fa-github"></i> Code
+        </a>
+        <a href="{{ project.demo }}" class="project-link" {% if project.demo == '#' %}onclick="return false"{% endif %}>
+          <i class="fas fa-external-link-alt"></i> Demo
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+
+    <!-- More coming card -->
+    <div class="glass-card project-card reveal" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem;min-height:280px;">
+      <div style="width:60px;height:60px;border-radius:50%;border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+        <i class="fas fa-plus" style="color:var(--text-dim);"></i>
+      </div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.5rem;">More Coming Soon</div>
+      <div style="color:var(--text-muted);font-size:0.85rem;">Currently working on exciting new projects. Stay tuned!</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div style="text-align:center;margin-top:4rem;" class="reveal">
+    <p style="color:var(--text-muted);margin-bottom:1.25rem;">Interested in collaborating or have a project in mind?</p>
+    <a href="{{ url_for('contact') }}" class="btn btn-primary">
+      <i class="fas fa-envelope"></i> Let's Talk
+    </a>
+  </div>
+</div>
+{% endblock %}

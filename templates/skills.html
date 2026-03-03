@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Skills{% endblock %}
+
+{% block content %}
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-tag">Technical Expertise</div>
+    <h1 class="section-title">My <span>Skills</span></h1>
+    <p class="section-desc">Technologies I work with to bring ideas to life.</p>
+    <div class="neon-line"></div>
+  </div>
+
+  <!-- Category filters -->
+  <div style="display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:3rem;" class="reveal">
+    {% set categories = [('all','All'), ('language','Languages'), ('framework','Frameworks'), ('web','Web'), ('database','Database')] %}
+    {% for cat_id, cat_label in categories %}
+    <button
+      class="filter-btn {% if loop.first %}active{% endif %}"
+      data-filter="{{ cat_id }}"
+      style="padding:0.45rem 1rem;border-radius:100px;font-size:0.82rem;font-weight:600;border:1px solid var(--border);background:var(--surface);color:var(--text-muted);transition:all 0.2s;"
+      onclick="filterSkills(this, '{{ cat_id }}')">
+      {{ cat_label }}
+    </button>
+    {% endfor %}
+  </div>
+
+  <div class="skills-grid" id="skillsGrid">
+    {% for skill in skills %}
+    <div class="glass-card skill-card" data-category="{{ skill.category }}">
+      <div class="skill-header">
+        <div class="skill-icon">
+          <i class="{{ skill.icon }}"></i>
+        </div>
+        <div>
+          <div class="skill-name">{{ skill.name }}</div>
+          <div class="skill-level">{{ skill.level }}% Proficiency</div>
+        </div>
+      </div>
+      <div class="skill-bar-track">
+        <div class="skill-bar-fill" data-level="{{ skill.level }}" style="width:0%;"></div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Tech stack visual -->
+  <div style="margin-top:5rem;text-align:center;" class="reveal">
+    <div class="section-tag" style="margin-bottom:1.5rem;">Tech Stack at a Glance</div>
+    <div style="display:flex;flex-wrap:wrap;gap:0.75rem;justify-content:center;">
+      {% for skill in skills %}
+      <span style="
+        display:inline-flex;align-items:center;gap:0.5rem;
+        padding:0.5rem 1rem;border-radius:100px;
+        border:1px solid var(--border);
+        background:var(--surface);
+        font-size:0.85rem;font-weight:600;
+        color:var(--text-muted);
+        transition:all 0.2s;
+      "
+        onmouseover="this.style.color='var(--accent)';this.style.borderColor='rgba(0,212,255,0.4)';this.style.background='rgba(0,212,255,0.05)'"
+        onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)';this.style.background='var(--surface)'">
+        <i class="{{ skill.icon }}"></i> {{ skill.name }}
+      </span>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+function filterSkills(btn, filter) {
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.style.background   = 'var(--surface)';
+    b.style.color        = 'var(--text-muted)';
+    b.style.borderColor  = 'var(--border)';
+  });
+  btn.style.background  = 'var(--accent)';
+  btn.style.color       = '#050b18';
+  btn.style.borderColor = 'var(--accent)';
+
+  document.querySelectorAll('.skill-card').forEach(card => {
+    const show = filter === 'all' || card.dataset.category === filter;
+    card.style.display = show ? '' : 'none';
+  });
+}
+
+// Trigger active button styles on load
+const firstBtn = document.querySelector('.filter-btn.active');
+if (firstBtn) {
+  firstBtn.style.background  = 'var(--accent)';
+  firstBtn.style.color       = '#050b18';
+  firstBtn.style.borderColor = 'var(--accent)';
+}
+</script>
+{% endblock %}

@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="section">
+  <div class="section-header">
+    <div class="section-tag">Who I Am</div>
+    <h1 class="section-title">About <span>Me</span></h1>
+    <div class="neon-line"></div>
+  </div>
+
+  <div class="about-grid">
+    <!-- Avatar Column -->
+    <div class="about-avatar-wrap reveal">
+      <div class="about-img-wrap">
+        <div class="about-img-glow"></div>
+        <div class="about-img-frame">
+          <img
+            src="{{ url_for('static', filename='images/about.png') }}"
+            alt="Ashbi Saju"
+            class="about-photo"
+            onerror="this.parentElement.innerHTML='<div class=\'about-img-fallback\'><i class=\'fas fa-user-astronaut\'></i><span>Ashbi Saju</span></div>'"
+          />
+        </div>
+        <!-- Name card pinned below -->
+        <div class="about-name-card glass-card">
+          <div class="about-name-card-inner">
+            <span class="about-name-text">{{ profile.name }}</span>
+            <span class="about-title-text">{{ profile.title }}</span>
+          </div>
+          <div class="about-status-dot"></div>
+        </div>
+      </div>
+
+      <style>
+      .about-img-wrap {
+        position: relative;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .about-img-glow {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 320px; height: 320px;
+        border-radius: 28px;
+        background: radial-gradient(circle, rgba(0,212,255,0.15), rgba(124,58,237,0.08), transparent 70%);
+        filter: blur(20px);
+        z-index: 0;
+        animation: pulse-glow 4s ease-in-out infinite;
+      }
+      .about-img-frame {
+        position: relative; z-index: 1;
+        width: 280px; height: 320px;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 2px solid rgba(0,212,255,0.3);
+        box-shadow:
+          0 0 0 6px rgba(0,212,255,0.05),
+          0 20px 50px rgba(0,0,0,0.35);
+        background: var(--bg2);
+        animation: float 6s ease-in-out infinite;
+      }
+      .about-photo {
+        width: 100%; height: 100%;
+        object-fit: cover; object-position: top center;
+        display: block; transition: transform 0.5s ease;
+      }
+      .about-img-frame:hover .about-photo { transform: scale(1.04); }
+      .about-img-fallback {
+        width: 100%; height: 100%;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 0.75rem;
+        font-size: 4.5rem; color: var(--accent);
+        background: radial-gradient(circle at 35% 35%, rgba(0,212,255,0.1), transparent);
+      }
+      .about-img-fallback span {
+        font-family: 'Syne', sans-serif; font-size: 1rem;
+        font-weight: 700; color: var(--text);
+      }
+      .about-name-card {
+        position: relative; z-index: 2;
+        margin-top: -1.2rem;
+        padding: 0.85rem 1.4rem;
+        border-radius: 14px;
+        display: flex; align-items: center; gap: 0.75rem;
+        min-width: 220px;
+      }
+      .about-name-card-inner { display: flex; flex-direction: column; }
+      .about-name-text {
+        font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+      }
+      .about-title-text {
+        font-size: 0.75rem; color: var(--text-muted); margin-top: 0.1rem;
+      }
+      .about-status-dot {
+        width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+        background: #22c55e; box-shadow: 0 0 8px #22c55e;
+        animation: pulse-glow 2s ease-in-out infinite; margin-left: auto;
+      }
+      </style>
+    </div>
+
+    <!-- Info Column -->
+    <div class="reveal">
+      <div class="section-tag" style="margin-bottom:1rem;">My Story</div>
+      <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;margin-bottom:1.25rem;line-height:1.2;">
+        Passionate Developer &<br><span class="gradient-text">Lifelong Learner</span>
+      </h2>
+
+      <p class="about-body">{{ profile.about }}</p>
+
+      <div class="about-info-grid">
+        <div class="info-item glass-card">
+          <i class="fas fa-graduation-cap"></i>
+          <div>
+            <div class="info-label">Degree</div>
+            <div class="info-value">MCA (Pursuing)</div>
+          </div>
+        </div>
+        <div class="info-item glass-card">
+          <i class="fas fa-map-marker-alt"></i>
+          <div>
+            <div class="info-label">Location</div>
+            <div class="info-value">{{ profile.location }}</div>
+          </div>
+        </div>
+        <div class="info-item glass-card">
+          <i class="fas fa-envelope"></i>
+          <div>
+            <div class="info-label">Email</div>
+            <div class="info-value" style="font-size:0.82rem;">{{ profile.email }}</div>
+          </div>
+        </div>
+        <div class="info-item glass-card">
+          <i class="fas fa-language"></i>
+          <div>
+            <div class="info-label">Languages</div>
+            <div class="info-value">English, Malayalam</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+        <a href="{{ url_for('contact') }}" class="btn btn-primary">
+          <i class="fas fa-envelope"></i> Get In Touch
+        </a>
+        <a href="{{ url_for('skills') }}" class="btn btn-outline">
+          <i class="fas fa-code"></i> View Skills
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interests strip -->
+  <div style="margin-top:5rem;" class="reveal">
+    <div class="section-tag" style="margin-bottom:1.5rem;">What I Love</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;">
+      {% set interests = [
+        ('fas fa-robot', 'AI & Machine Learning', 'Building intelligent systems'),
+        ('fas fa-globe', 'Web Development', 'Modern, responsive UIs'),
+        ('fas fa-microchip', 'IoT & Hardware', 'Bridging software & hardware'),
+        ('fas fa-database', 'Database Design', 'Efficient data modeling'),
+      ] %}
+      {% for icon, title, desc in interests %}
+      <div class="glass-card" style="padding:1.5rem;text-align:center;">
+        <i class="{{ icon }}" style="font-size:2rem;color:var(--accent);margin-bottom:0.75rem;display:block;"></i>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:0.4rem;">{{ title }}</div>
+        <div style="font-size:0.8rem;color:var(--text-muted);">{{ desc }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

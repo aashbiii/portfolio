@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-tag">Get In Touch</div>
+    <h1 class="section-title">Contact <span>Me</span></h1>
+    <p class="section-desc">Have a project in mind or just want to say hi? I'd love to hear from you.</p>
+    <div class="neon-line"></div>
+  </div>
+
+  <div class="contact-grid">
+    <!-- Left: Info -->
+    <div class="reveal">
+      <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;margin-bottom:0.75rem;line-height:1.2;">
+        Let's Build Something<br><span class="gradient-text">Amazing Together</span>
+      </h2>
+      <p style="color:var(--text-muted);line-height:1.8;margin-bottom:2rem;">
+        I'm always open to discussing new projects, creative ideas, or opportunities
+        to be part of your vision. Drop me a message and I'll get back to you!
+      </p>
+
+      <div class="contact-info-cards">
+        <!-- Email -->
+        <div class="glass-card contact-card">
+          <div class="contact-card-icon" style="background:rgba(0,212,255,0.08);border-color:rgba(0,212,255,0.2);">
+            <i class="fas fa-envelope" style="color:var(--accent);"></i>
+          </div>
+          <div>
+            <div class="contact-card-label">Email Address</div>
+            <div class="contact-card-value">
+              <a href="mailto:{{ profile.email }}" style="color:var(--text);transition:color 0.2s;"
+                 onmouseover="this.style.color='var(--accent)'"
+                 onmouseout="this.style.color='var(--text)'">
+                {{ profile.email }}
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="glass-card contact-card">
+          <div class="contact-card-icon" style="background:rgba(255,107,53,0.08);border-color:rgba(255,107,53,0.2);">
+            <i class="fas fa-map-marker-alt" style="color:var(--accent2);"></i>
+          </div>
+          <div>
+            <div class="contact-card-label">Location</div>
+            <div class="contact-card-value">{{ profile.location }}</div>
+          </div>
+        </div>
+
+        <!-- GitHub -->
+        <div class="glass-card contact-card">
+          <div class="contact-card-icon" style="background:rgba(124,58,237,0.08);border-color:rgba(124,58,237,0.2);">
+            <i class="fab fa-github" style="color:var(--accent3);"></i>
+          </div>
+          <div>
+            <div class="contact-card-label">GitHub</div>
+            <div class="contact-card-value">
+              <a href="{{ profile.github }}" target="_blank" style="color:var(--text);transition:color 0.2s;"
+                 onmouseover="this.style.color='var(--accent3)'"
+                 onmouseout="this.style.color='var(--text)'">
+                @ashbisaju
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Form -->
+    <div class="glass-card contact-form reveal">
+      <div class="form-title">Send a Message</div>
+      <div class="form-sub">I typically reply within 24 hours.</div>
+
+      <form id="contactForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="name">Your Name *</label>
+            <input class="form-input" type="text" id="name" name="name"
+                   placeholder="John Doe" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address *</label>
+            <input class="form-input" type="email" id="email" name="email"
+                   placeholder="john@example.com" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="subject">Subject</label>
+          <input class="form-input" type="text" id="subject" name="subject"
+                 placeholder="Project Collaboration" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message">Message *</label>
+          <textarea class="form-textarea" id="message" name="message"
+                    placeholder="Tell me about your project or idea…" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
+          <i class="fas fa-paper-plane"></i> Send Message
+        </button>
+
+        <div class="form-status" id="formStatus"></div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

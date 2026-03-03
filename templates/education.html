@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Education{% endblock %}
+
+{% block content %}
+<div class="section">
+  <div class="section-header reveal">
+    <div class="section-tag">Academic Journey</div>
+    <h1 class="section-title">My <span>Education</span></h1>
+    <p class="section-desc">The academic foundation that shapes my technical thinking.</p>
+    <div class="neon-line"></div>
+  </div>
+
+  <div style="max-width:760px;margin:0 auto;">
+    <div class="timeline">
+      {% for edu in education %}
+      <div class="timeline-item reveal">
+        <!-- Dot -->
+        <div class="timeline-dot" style="color:{{ edu.color }};border-color:{{ edu.color }}33;">
+          <i class="{{ edu.icon }}" style="color:{{ edu.color }};"></i>
+        </div>
+
+        <div class="glass-card timeline-card">
+          <div class="timeline-period">
+            <i class="fas fa-calendar-alt"></i>
+            {{ edu.period }}
+            {% if edu.current %}
+            <span class="badge-current">Current</span>
+            {% endif %}
+          </div>
+
+          <div class="timeline-degree">{{ edu.degree }}</div>
+
+          <div class="timeline-inst">
+            <i class="fas fa-university"></i>
+            {{ edu.institution }}
+          </div>
+
+          <p class="timeline-desc">{{ edu.description }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Learning Philosophy -->
+  <div style="margin-top:5rem;text-align:center;" class="reveal">
+    <div class="glass-card" style="padding:3rem;max-width:700px;margin:0 auto;">
+      <i class="fas fa-lightbulb" style="font-size:2.5rem;color:var(--accent);margin-bottom:1rem;display:block;"></i>
+      <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.3rem;margin-bottom:0.75rem;">
+        Learning Philosophy
+      </h3>
+      <p style="color:var(--text-muted);line-height:1.8;">
+        I believe in continuous learning through building. Every project, every bug, and every
+        line of code is an opportunity to grow. My education provides the foundation, but my
+        curiosity and hands-on experience drive my real development.
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

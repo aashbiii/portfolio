@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Ashbi Saju – MCA Student & Software Developer Portfolio" />
+  <title>{% block title %}Ashbi Saju{% endblock %} | Portfolio</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- ═══════════════════════════ CURSOR ══════════════════════════════════ -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ═══════════════════════════ NAVBAR ══════════════════════════════════ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="{{ url_for('home') }}" class="nav-logo">
+      <span class="logo-bracket">&lt;</span>
+      <span class="logo-name">AS</span>
+      <span class="logo-bracket">/&gt;</span>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+      {% set pages = [
+        ('home',         'Home',         'fas fa-house'),
+        ('about',        'About',        'fas fa-user'),
+        ('skills',       'Skills',       'fas fa-code'),
+        ('projects',     'Projects',     'fas fa-folder-open'),
+        ('education',    'Education',    'fas fa-graduation-cap'),
+        ('achievements', 'Achievements', 'fas fa-trophy'),
+        ('contact',      'Contact',      'fas fa-envelope'),
+      ] %}
+      {% for route, label, icon in pages %}
+      <li>
+        <a href="{{ url_for(route) }}"
+           class="nav-link {% if active == route %}active{% endif %}">
+          <i class="{{ icon }}"></i>
+          <span>{{ label }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <div class="nav-actions">
+      <!-- Theme Toggle -->
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <span class="theme-icon sun"><i class="fas fa-sun"></i></span>
+        <span class="theme-icon moon"><i class="fas fa-moon"></i></span>
+      </button>
+      <!-- Hamburger -->
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════ MAIN ════════════════════════════════════ -->
+<main class="page-main">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- ═══════════════════════════ FOOTER ══════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <span class="logo-bracket">&lt;</span>
+      <span class="logo-name">Ashbi Saju</span>
+      <span class="logo-bracket">/&gt;</span>
+      <p>MCA Student | Software Developer</p>
+    </div>
+
+    <div class="footer-links">
+      <a href="https://github.com/ashbisaju" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+      <a href="https://linkedin.com/in/ashbisaju" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      <a href="mailto:ashbi404@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+    </div>
+
+    <p class="footer-copy">&copy; 2025 Ashbi Saju. Crafted with <i class="fas fa-heart" style="color:#ff6b35"></i> &amp; Python.</p>
+  </div>
+</footer>
+
+<!-- Scroll-to-top -->
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
+<!-- Main JS -->
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>
