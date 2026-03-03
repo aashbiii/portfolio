@@ -1,17 +1,26 @@
 """
 Ashbi Saju - Personal Portfolio
-Flask Application Entry Point
+Flask Application for Vercel Deployment
 
 Run Instructions:
-1. Install dependencies: pip install flask
-2. Run: python app.py
-3. Visit: http://localhost:5000
+1. Install dependencies: pip install -r requirements.txt
+2. For local development: python -m flask --app api.index run
+3. For Vercel: Deploy via 'vercel deploy'
 """
 
 from flask import Flask, render_template, request, jsonify, send_from_directory
 import os
+from pathlib import Path
 
-app = Flask(__name__)
+# Get the project root directory
+BASE_DIR = Path(__file__).parent.parent
+
+app = Flask(
+    __name__,
+    template_folder=str(BASE_DIR / "templates"),
+    static_folder=str(BASE_DIR / "static"),
+    static_url_path="/static"
+)
 app.secret_key = "ashbi_portfolio_2025"
 
 # ─── Portfolio Data ─────────────────────────────────────────────────────────
@@ -188,7 +197,14 @@ def download_resume():
         return send_from_directory(resume_path, "resume.pdf", as_attachment=True)
     return jsonify({"message": "Resume will be available soon!"}), 404
 
-# ─── Run ────────────────────────────────────────────────────────────────────
+# ─── Error Handlers ────────────────────────────────────────────────────────
 
+@app.errorhandler(404)
+def not_found(error):
+    return render_template("home.html", profile=PROFILE, active="home"), 200
+
+# ─── Export app for Vercel ────────────────────────────────────────────────
+
+# For local development
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
