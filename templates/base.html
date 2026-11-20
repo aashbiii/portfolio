@@ -1,105 +1,89 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
+{% from "_icons.html" import icon %}<!doctype html>
+<html lang="en" data-theme="obsidian">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Ashbi Saju – MCA Student & Software Developer Portfolio" />
-  <title>{% block title %}Ashbi Saju{% endblock %} | Portfolio</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% block title %}{{ profile.name }} — {{ profile.title }}{% endblock %}</title>
+  <meta name="description" content="{{ profile.summary }}">
+  <meta name="author" content="{{ profile.name }}">
+  <meta name="keywords" content="Ashbi Saju, software developer, MCA, Rajagiri, Django, Flask, Python, AI, machine learning, portfolio, Kerala">
+  <meta name="theme-color" content="#0b0b12">
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ profile.name }} — {{ profile.title }}">
+  <meta property="og:description" content="{{ profile.headline }}">
+  <meta property="og:image" content="{{ url_for('static', filename='img/og.png', _external=True) }}">
+  <meta property="og:url" content="{{ site_url }}">
+  <meta name="twitter:card" content="summary_large_image">
 
-  <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/hero.webp') }}">
 
-  <!-- Main CSS -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
-  {% block extra_css %}{% endblock %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+
+  {# Apply the saved theme before first paint — no flash. #}
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('ashbi-theme');
+        if (!t) t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'ivory' : 'obsidian';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+      document.documentElement.classList.add('js');
+    })();
+  </script>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  {% block head %}{% endblock %}
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "{{ profile.name }}",
+    "jobTitle": "{{ profile.title }}",
+    "email": "mailto:{{ profile.email }}",
+    "address": { "@type": "PostalAddress", "addressRegion": "Kerala", "addressCountry": "IN" },
+    "alumniOf": ["Rajagiri College of Social Sciences", "De Paul Institute of Science & Technology"],
+    "sameAs": ["{{ profile.github }}", "{{ profile.linkedin }}"]
+  }
+  </script>
 </head>
 <body>
+  {# Grain + cursor layers #}
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"><div class="cursor__dot"></div><div class="cursor__ring"><span class="cursor__label"></span></div></div>
+  <div class="progress" aria-hidden="true"><span></span></div>
 
-<!-- ═══════════════════════════ CURSOR ══════════════════════════════════ -->
-<div class="cursor-dot" id="cursorDot"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+  {% block body %}{% endblock %}
 
-<!-- ═══════════════════════════ NAVBAR ══════════════════════════════════ -->
-<nav class="navbar" id="navbar">
-  <div class="nav-container">
-    <a href="{{ url_for('home') }}" class="nav-logo">
-      <span class="logo-bracket">&lt;</span>
-      <span class="logo-name">AS</span>
-      <span class="logo-bracket">/&gt;</span>
-    </a>
-
-    <ul class="nav-links" id="navLinks">
-      {% set pages = [
-        ('home',         'Home',         'fas fa-house'),
-        ('about',        'About',        'fas fa-user'),
-        ('skills',       'Skills',       'fas fa-code'),
-        ('projects',     'Projects',     'fas fa-folder-open'),
-        ('education',    'Education',    'fas fa-graduation-cap'),
-        ('achievements', 'Achievements', 'fas fa-trophy'),
-        ('contact',      'Contact',      'fas fa-envelope'),
-      ] %}
-      {% for route, label, icon in pages %}
-      <li>
-        <a href="{{ url_for(route) }}"
-           class="nav-link {% if active == route %}active{% endif %}">
-          <i class="{{ icon }}"></i>
-          <span>{{ label }}</span>
-        </a>
-      </li>
+  {# Theme switcher #}
+  <div class="theme-dock" data-theme-dock>
+    <button class="theme-dock__toggle magnetic" aria-label="Change theme" aria-expanded="false" data-theme-toggle data-cursor="Theme">
+      {{ icon('palette', 20) }}
+    </button>
+    <div class="theme-dock__panel" role="menu" aria-label="Themes">
+      <p class="theme-dock__title">Theme</p>
+      {% for t in themes %}
+      <button class="theme-opt" role="menuitemradio" data-set-theme="{{ t.id }}" aria-label="{{ t.name }} theme">
+        <span class="theme-opt__sw">
+          {% for c in t.swatch %}<i style="background: {{ c }}"></i>{% endfor %}
+        </span>
+        <span>{{ t.name }}</span>
+      </button>
       {% endfor %}
-    </ul>
-
-    <div class="nav-actions">
-      <!-- Theme Toggle -->
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-        <span class="theme-icon sun"><i class="fas fa-sun"></i></span>
-        <span class="theme-icon moon"><i class="fas fa-moon"></i></span>
-      </button>
-      <!-- Hamburger -->
-      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
     </div>
   </div>
-</nav>
 
-<!-- ═══════════════════════════ MAIN ════════════════════════════════════ -->
-<main class="page-main">
-  {% block content %}{% endblock %}
-</main>
+  <div class="toast" role="status" aria-live="polite"></div>
 
-<!-- ═══════════════════════════ FOOTER ══════════════════════════════════ -->
-<footer class="footer">
-  <div class="footer-container">
-    <div class="footer-brand">
-      <span class="logo-bracket">&lt;</span>
-      <span class="logo-name">Ashbi Saju</span>
-      <span class="logo-bracket">/&gt;</span>
-      <p>MCA Student | Software Developer</p>
-    </div>
-
-    <div class="footer-links">
-      <a href="https://github.com/ashbisaju" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
-      <a href="https://linkedin.com/in/ashbisaju" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-      <a href="mailto:ashbi404@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
-    </div>
-
-    <p class="footer-copy">&copy; 2025 Ashbi Saju. Crafted with <i class="fas fa-heart" style="color:#ff6b35"></i> &amp; Python.</p>
-  </div>
-</footer>
-
-<!-- Scroll-to-top -->
-<button class="scroll-top" id="scrollTop" aria-label="Scroll to top">
-  <i class="fas fa-chevron-up"></i>
-</button>
-
-<!-- Main JS -->
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
-{% block extra_js %}{% endblock %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+  {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Page not found — {{ profile.name }}{% endblock %}
+{% block body %}
+<main class="lost">
+  <canvas class="hero__canvas" data-field aria-hidden="true"></canvas>
+  <div class="hero__glow hero__glow--a" aria-hidden="true"></div>
+  <div class="lost__inner">
+    <p class="hero__eyebrow"><span class="pulse"></span>Error 404</p>
+    <h1 class="lost__code"><span class="split" data-split>Lost</span> <em class="split split--serif" data-split>in space</em></h1>
+    <p class="lost__txt">The page you're looking for drifted off. Let's get you back.</p>
+    <a href="{{ url_for('index') }}" class="btn btn--primary magnetic" data-cursor="Home"><span class="btn__fill"></span><span class="btn__txt">Take me home</span></a>
+  </div>
+</main>
+{% endblock %}

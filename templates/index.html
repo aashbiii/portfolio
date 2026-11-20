@@ -1,0 +1,482 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon %}
+
+{% block body %}
+{# ───────────── Preloader ───────────── #}
+<div class="loader" data-loader aria-hidden="true">
+  <div class="loader__inner">
+    <div class="loader__name"><span>{{ profile.first_name }}</span><em>{{ profile.last_name }}</em></div>
+    <div class="loader__bar"><span data-loader-bar></span></div>
+    <div class="loader__count"><span data-loader-count>0</span>%</div>
+  </div>
+  <div class="loader__panel"></div>
+</div>
+
+{# ───────────── Navigation ───────────── #}
+<header class="nav" data-nav>
+  <a href="#top" class="nav__logo magnetic" aria-label="Back to top" data-cursor="Top">
+    <span class="nav__mark">{{ profile.initials }}</span>
+    <span class="nav__brand">{{ profile.name }}</span>
+  </a>
+  <nav class="nav__links" aria-label="Primary">
+    <span class="nav__pill" data-nav-pill></span>
+    {% for id, label in nav %}
+    <a href="#{{ id }}" data-nav-link="{{ id }}">{{ label }}</a>
+    {% endfor %}
+  </nav>
+  <div class="nav__actions">
+    <a class="btn btn--sm btn--ghost magnetic nav__resume" href="{{ resume_url }}" target="_blank" rel="noopener" data-cursor="PDF">Resume {{ icon('arrow', 14) }}</a>
+    <button class="nav__burger" aria-label="Open menu" aria-expanded="false" data-burger><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="menu" data-menu aria-hidden="true">
+  <div class="menu__bg"></div>
+  <nav class="menu__links">
+    {% for id, label in nav %}
+    <a href="#{{ id }}" data-menu-link><span class="menu__num">0{{ loop.index }}</span><span class="menu__txt">{{ label }}</span></a>
+    {% endfor %}
+  </nav>
+  <div class="menu__foot">
+    <a href="mailto:{{ profile.email }}">{{ profile.email }}</a>
+    <div class="menu__social">
+      <a href="{{ profile.github }}" target="_blank" rel="noopener">GitHub</a>
+      <a href="{{ profile.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="{{ resume_url }}" target="_blank" rel="noopener">Resume</a>
+    </div>
+  </div>
+</div>
+
+<main id="top">
+{# ───────────── Hero ───────────── #}
+<section class="hero" data-hero>
+  <canvas class="hero__canvas" data-field aria-hidden="true"></canvas>
+  <div class="hero__glow hero__glow--a" aria-hidden="true"></div>
+  <div class="hero__glow hero__glow--b" aria-hidden="true"></div>
+
+  <div class="hero__grid container">
+    <div class="hero__copy">
+      <p class="hero__eyebrow" data-hero-fade>
+        <span class="pulse"></span>{{ profile.availability }}
+      </p>
+      <h1 class="hero__title" aria-label="{{ profile.name }}">
+        <span class="line"><span class="split" data-hero-split>{{ profile.first_name }}</span></span>
+        <span class="line line--indent"><span class="split split--serif" data-hero-split>{{ profile.last_name }}</span><span class="hero__dot">.</span></span>
+      </h1>
+      <div class="hero__role" data-hero-fade>
+        <span class="hero__role-label">I'm a</span>
+        <span class="rotator" data-rotator>
+          {% for r in profile.roles %}<span class="rotator__item{% if loop.first %} is-active{% endif %}">{{ r }}</span>{% endfor %}
+        </span>
+      </div>
+      <p class="hero__lead" data-hero-fade>{{ profile.headline }}</p>
+      <div class="hero__cta" data-hero-fade>
+        <a href="#projects" class="btn btn--primary magnetic" data-cursor="Scroll">
+          <span class="btn__fill"></span><span class="btn__txt">View my work</span>{{ icon('arrow-down', 18) }}
+        </a>
+        <a href="{{ resume_url }}" download="Ashbi_Saju_Resume.pdf" class="btn btn--ghost magnetic" data-cursor="Save">
+          <span class="btn__txt">Download CV</span>{{ icon('download', 18) }}
+        </a>
+      </div>
+      <ul class="hero__social" data-hero-fade>
+        <li><a href="{{ profile.github }}" target="_blank" rel="noopener" class="magnetic" aria-label="GitHub" data-cursor="Open">{{ icon('github', 18) }}</a></li>
+        <li><a href="{{ profile.linkedin }}" target="_blank" rel="noopener" class="magnetic" aria-label="LinkedIn" data-cursor="Open">{{ icon('linkedin', 18) }}</a></li>
+        <li><a href="mailto:{{ profile.email }}" class="magnetic" aria-label="Email" data-cursor="Write">{{ icon('mail', 18) }}</a></li>
+        <li class="hero__loc">{{ icon('pin', 16) }} {{ profile.location }}</li>
+      </ul>
+    </div>
+
+    <div class="hero__visual" data-hero-visual>
+      <div class="hero__orbit hero__orbit--1" aria-hidden="true"><span></span></div>
+      <div class="hero__orbit hero__orbit--2" aria-hidden="true"><span></span></div>
+      <div class="hero__blob" aria-hidden="true"></div>
+      <img class="hero__img" src="{{ url_for('static', filename='img/hero.webp') }}" alt="Cartoon portrait of {{ profile.name }}" width="1080" height="1440" fetchpriority="high" data-parallax="-0.06">
+      <div class="chip chip--a float" data-depth="0.6">{{ icon('code', 16) }} Python · Django</div>
+      <div class="chip chip--b float" data-depth="1">{{ icon('brain', 16) }} AI · ML</div>
+      <div class="chip chip--c float" data-depth="0.8">{{ icon('chip', 16) }} ESP32 · MQTT</div>
+      <div class="hero__badge" data-depth="0.4">
+        <svg viewBox="0 0 120 120" class="spin-slow" aria-hidden="true">
+          <defs><path id="circ" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs>
+          <text><textPath href="#circ">MCA · SOFTWARE DEVELOPER · KERALA · </textPath></text>
+        </svg>
+        <span>{{ icon('sparkle', 22) }}</span>
+      </div>
+    </div>
+  </div>
+
+  <a href="#about" class="hero__scroll" aria-label="Scroll to about" data-cursor="Down">
+    <span class="hero__scroll-line"></span><span>Scroll</span>
+  </a>
+</section>
+
+{# ───────────── Marquee ───────────── #}
+<section class="marquee" aria-label="Technologies">
+  <div class="marquee__row" data-marquee="1">
+    <div class="marquee__track">
+      {% for _ in range(2) %}{% for m in marquee %}<span>{{ m }}</span><i>✦</i>{% endfor %}{% endfor %}
+    </div>
+  </div>
+  <div class="marquee__row marquee__row--alt" data-marquee="-1">
+    <div class="marquee__track">
+      {% for _ in range(2) %}{% for m in marquee|reverse %}<span>{{ m }}</span><i>✦</i>{% endfor %}{% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ───────────── About ───────────── #}
+<section class="section about" id="about">
+  <div class="container">
+    <header class="sec-head">
+      <span class="sec-head__idx">01</span>
+      <h2 class="sec-head__title reveal-title">About <em>me</em></h2>
+    </header>
+
+    <p class="statement" data-words>
+      {{ profile.summary }}
+    </p>
+
+    <div class="about__grid">
+      <div class="about__photo tilt" data-tilt>
+        <img src="{{ url_for('static', filename='img/about.webp') }}" alt="Cartoon portrait of {{ profile.name }}" loading="lazy" width="1080" height="1440">
+        <div class="tilt__glare"></div>
+        <div class="about__tag">
+          <strong>{{ profile.name }}</strong>
+          <span>{{ profile.title }}</span>
+        </div>
+      </div>
+
+      <div class="about__body">
+        {% for p in profile.about %}
+        <p class="reveal">{{ p }}</p>
+        {% endfor %}
+
+        <dl class="facts reveal-stagger">
+          <div class="facts__item"><dt>{{ icon('pin', 16) }} Based in</dt><dd>{{ profile.location }}</dd></div>
+          <div class="facts__item"><dt>{{ icon('grad', 16) }} Studying</dt><dd>MCA · Rajagiri (2027)</dd></div>
+          <div class="facts__item"><dt>{{ icon('briefcase', 16) }} Interned at</dt><dd>RLabz</dd></div>
+          <div class="facts__item"><dt>{{ icon('lang', 16) }} Speaks</dt><dd>English · Malayalam</dd></div>
+        </dl>
+
+        <div class="interests reveal">
+          {% for i in profile.interests %}<span class="tag">{{ i }}</span>{% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="stats">
+      {% for s in stats %}
+      <div class="stat spotlight">
+        <div class="stat__num"><span data-count="{{ s.value }}" data-decimals="{{ s.decimals or 0 }}">0</span>{{ s.suffix }}</div>
+        <div class="stat__label">{{ s.label }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ───────────── Experience ───────────── #}
+<section class="section experience" id="experience">
+  <div class="container">
+    <header class="sec-head">
+      <span class="sec-head__idx">02</span>
+      <h2 class="sec-head__title reveal-title">Experience</h2>
+    </header>
+
+    {% for e in experience %}
+    <article class="xp spotlight reveal">
+      <div class="xp__side">
+        <span class="xp__period">{{ e.period }}</span>
+        <span class="xp__dur">{{ e.duration }}</span>
+      </div>
+      <div class="xp__main">
+        <h3 class="xp__role">{{ e.role }}</h3>
+        <p class="xp__company">{{ icon('briefcase', 16) }} {{ e.company }} <span>· {{ e.location }}</span></p>
+        <ul class="xp__points">
+          {% for p in e.points %}<li>{{ p }}</li>{% endfor %}
+        </ul>
+        <div class="xp__stack">{% for s in e.stack %}<span class="tag tag--sm">{{ s }}</span>{% endfor %}</div>
+      </div>
+      <div class="xp__mark" aria-hidden="true">{{ e.company }}</div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+{# ───────────── Projects ───────────── #}
+<section class="section projects" id="projects">
+  <div class="container">
+    <header class="sec-head sec-head--row">
+      <div>
+        <span class="sec-head__idx">03</span>
+        <h2 class="sec-head__title reveal-title">Selected <em>work</em></h2>
+      </div>
+      <p class="sec-head__note reveal">{{ projects|length }} projects across web, AI, IoT, mobile and desktop. Tap any card for the full story.</p>
+    </header>
+
+    <div class="filters reveal" role="tablist" aria-label="Filter projects">
+      <span class="filters__pill" data-filter-pill></span>
+      {% for key, label in filters %}
+      <button role="tab" class="filters__btn{% if loop.first %} is-active{% endif %}" data-filter="{{ key }}" aria-selected="{{ 'true' if loop.first else 'false' }}">
+        {{ label }}
+        <sup>{{ projects|length if key == 'all' else projects|selectattr('category', 'equalto', key)|list|length }}</sup>
+      </button>
+      {% endfor %}
+    </div>
+
+    <div class="work" data-work>
+      {% for p in projects %}
+      <article class="card tilt spotlight{% if p.featured %} card--feat{% endif %}" data-cat="{{ p.category }}" data-project="{{ p.slug }}" data-tilt style="--accent: {{ p.accent }}" tabindex="0" role="button" aria-label="Open {{ p.title }} details" data-cursor="View">
+        <div class="card__visual">
+          <div class="card__art" aria-hidden="true">
+            <span class="card__ring"></span><span class="card__ring card__ring--2"></span>
+            <span class="card__icon">{{ icon(p.icon, 34) }}</span>
+          </div>
+          <span class="card__num">{{ '%02d' % loop.index }}</span>
+          <span class="card__year">{{ p.year }}</span>
+        </div>
+        <div class="card__body">
+          <p class="card__sub">{{ p.subtitle }}</p>
+          <h3 class="card__title">{{ p.title }}</h3>
+          <p class="card__sum">{{ p.summary }}</p>
+          <div class="card__stack">
+            {% for s in p.stack[:4] %}<span class="tag tag--sm">{{ s }}</span>{% endfor %}
+            {% if p.stack|length > 4 %}<span class="tag tag--sm tag--more">+{{ p.stack|length - 4 }}</span>{% endif %}
+          </div>
+        </div>
+        <span class="card__go">{{ icon('arrow', 18) }}</span>
+        <div class="tilt__glare"></div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{# Project modal #}
+<div class="modal" data-modal aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal__backdrop" data-modal-close></div>
+  <div class="modal__panel" data-lenis-prevent>
+    <button class="modal__close magnetic" data-modal-close aria-label="Close">{{ icon('close', 20) }}</button>
+    <div class="modal__head">
+      <span class="modal__icon" data-m-icon></span>
+      <div>
+        <p class="modal__sub" data-m-sub></p>
+        <h3 class="modal__title" id="modal-title" data-m-title></h3>
+      </div>
+    </div>
+    <div class="modal__metrics" data-m-metrics></div>
+    <h4 class="modal__h">What I built</h4>
+    <ul class="modal__points" data-m-points></ul>
+    <h4 class="modal__h">Tech stack</h4>
+    <div class="modal__stack" data-m-stack></div>
+    <div class="modal__foot">
+      <a class="btn btn--primary btn--sm magnetic" data-m-github target="_blank" rel="noopener"><span class="btn__fill"></span><span class="btn__txt">GitHub</span>{{ icon('github', 16) }}</a>
+      <div class="modal__nav">
+        <button class="btn btn--ghost btn--sm" data-m-prev aria-label="Previous project">← Prev</button>
+        <button class="btn btn--ghost btn--sm" data-m-next aria-label="Next project">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="application/json" id="projects-data">{{ projects|tojson }}</script>
+<template id="icon-bank">{% for p in projects %}<span data-icon="{{ p.slug }}">{{ icon(p.icon, 28) }}</span>{% endfor %}</template>
+
+{# ───────────── Skills ───────────── #}
+<section class="section skills" id="skills">
+  <div class="container">
+    <header class="sec-head">
+      <span class="sec-head__idx">04</span>
+      <h2 class="sec-head__title reveal-title">Skills &amp; <em>tools</em></h2>
+    </header>
+
+    <div class="bento">
+      {% for g in skills %}
+      <div class="bento__cell spotlight reveal-card bento__cell--{{ loop.index }}">
+        <div class="bento__head">
+          <span class="bento__icon">{{ icon(g.icon, 22) }}</span>
+          <h3>{{ g.group }}</h3>
+          <span class="bento__count">{{ g['items']|length }}</span>
+        </div>
+        <div class="bento__chips">
+          {% for s in g['items'] %}<span class="tag">{{ s }}</span>{% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ───────────── Education ───────────── #}
+<section class="section education" id="education">
+  <div class="container">
+    <header class="sec-head">
+      <span class="sec-head__idx">05</span>
+      <h2 class="sec-head__title reveal-title">Education</h2>
+    </header>
+
+    <ol class="timeline" data-timeline>
+      <span class="timeline__track" aria-hidden="true"><span class="timeline__fill" data-timeline-fill></span></span>
+      {% for e in education %}
+      <li class="timeline__item reveal-side">
+        <span class="timeline__node{% if e.current %} is-current{% endif %}" aria-hidden="true"></span>
+        <div class="timeline__card spotlight">
+          <div class="timeline__top">
+            <span class="timeline__short">{{ e.short }}</span>
+            <span class="timeline__year">{{ e.year }}</span>
+          </div>
+          <h3>{{ e.course }}</h3>
+          <p class="timeline__inst">{{ e.institute }}</p>
+          <p class="timeline__board">{{ e.board }}</p>
+          <div class="timeline__foot">
+            <span class="score">{{ e.score }}</span>
+            {% if e.note %}<span class="timeline__note">{% if e.current %}<span class="pulse"></span>{% endif %}{{ e.note }}</span>{% endif %}
+          </div>
+        </div>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+{# ───────────── Recognition ───────────── #}
+<section class="section recog" id="achievements">
+  <div class="container">
+    <header class="sec-head">
+      <span class="sec-head__idx">06</span>
+      <h2 class="sec-head__title reveal-title">Recognition &amp; <em>leadership</em></h2>
+    </header>
+
+    <div class="recog__grid">
+      <div class="panel spotlight reveal-card panel--achieve">
+        <h3 class="panel__title">{{ icon('trophy', 20) }} Achievements</h3>
+        <ul class="list">
+          {% for a in achievements %}
+          <li><span class="list__icon">{{ icon(a.icon, 18) }}</span><div><strong>{{ a.title }}</strong><p>{{ a.detail }}</p></div></li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="panel spotlight reveal-card panel--cert">
+        <h3 class="panel__title">{{ icon('badge', 20) }} Certifications</h3>
+        <ul class="certs">
+          {% for c in certifications %}
+          <li class="cert">
+            <strong>{{ c.title }}</strong>
+            <span>{{ c.issuer }}</span>
+            <em>{{ c.detail }}</em>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="panel spotlight reveal-card panel--lead">
+        <h3 class="panel__title">{{ icon('flag', 20) }} Leadership &amp; activities</h3>
+        <ul class="list list--plain">
+          {% for l in leadership %}
+          <li><div><strong>{{ l.title }}</strong><p>{{ l.detail }}</p></div></li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="panel spotlight reveal-card panel--lang">
+        <h3 class="panel__title">{{ icon('lang', 20) }} Languages</h3>
+        {% for l in languages %}
+        <div class="meter">
+          <div class="meter__row"><strong>{{ l.name }}</strong><span>{{ l.level }}</span></div>
+          <div class="meter__bar"><span data-meter="{{ l.value }}"></span></div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ───────────── Contact ───────────── #}
+<section class="section contact" id="contact">
+  <div class="container">
+    <header class="contact__head">
+      <span class="sec-head__idx">07</span>
+      <h2 class="contact__title">
+        <span class="line"><span class="split" data-split>Let's build</span></span>
+        <span class="line"><span class="split split--serif" data-split>something great</span></span>
+      </h2>
+      <p class="contact__lead reveal">Have an internship, role or project in mind? My inbox is always open.</p>
+    </header>
+
+    <div class="contact__grid">
+      <div class="contact__cards">
+        <button class="ccard spotlight reveal-card" data-copy="{{ profile.email }}" data-cursor="Copy">
+          <span class="ccard__icon">{{ icon('mail', 22) }}</span>
+          <span class="ccard__k">Email</span>
+          <span class="ccard__v">{{ profile.email }}</span>
+          <span class="ccard__act">{{ icon('copy', 16) }}</span>
+        </button>
+        <a class="ccard spotlight reveal-card" href="tel:{{ profile.phone_link }}" data-cursor="Call">
+          <span class="ccard__icon">{{ icon('phone', 22) }}</span>
+          <span class="ccard__k">Phone</span>
+          <span class="ccard__v">{{ profile.phone }}</span>
+          <span class="ccard__act">{{ icon('arrow', 16) }}</span>
+        </a>
+        <a class="ccard spotlight reveal-card" href="{{ profile.linkedin }}" target="_blank" rel="noopener" data-cursor="Open">
+          <span class="ccard__icon">{{ icon('linkedin', 22) }}</span>
+          <span class="ccard__k">LinkedIn</span>
+          <span class="ccard__v">/in/{{ profile.linkedin_handle }}</span>
+          <span class="ccard__act">{{ icon('arrow', 16) }}</span>
+        </a>
+        <a class="ccard spotlight reveal-card" href="{{ profile.github }}" target="_blank" rel="noopener" data-cursor="Open">
+          <span class="ccard__icon">{{ icon('github', 22) }}</span>
+          <span class="ccard__k">GitHub</span>
+          <span class="ccard__v">@{{ profile.github_handle }}</span>
+          <span class="ccard__act">{{ icon('arrow', 16) }}</span>
+        </a>
+      </div>
+
+      <form class="form spotlight reveal-card" data-form data-endpoint="{{ contact_endpoint }}" data-email="{{ profile.email }}" novalidate>
+        <div class="field">
+          <input id="f-name" name="name" type="text" placeholder=" " autocomplete="name" required>
+          <label for="f-name">Your name</label>
+          <small class="field__err" data-err="name"></small>
+        </div>
+        <div class="field">
+          <input id="f-email" name="email" type="email" placeholder=" " autocomplete="email" required>
+          <label for="f-email">Email address</label>
+          <small class="field__err" data-err="email"></small>
+        </div>
+        <div class="field">
+          <input id="f-subject" name="subject" type="text" placeholder=" ">
+          <label for="f-subject">Subject (optional)</label>
+        </div>
+        <div class="field">
+          <textarea id="f-message" name="message" rows="5" placeholder=" " required></textarea>
+          <label for="f-message">Tell me about your project</label>
+          <small class="field__err" data-err="message"></small>
+        </div>
+        <input type="text" name="company" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" class="btn btn--primary btn--block magnetic" data-cursor="Send">
+          <span class="btn__fill"></span><span class="btn__txt" data-submit-txt>Send message</span>{{ icon('send', 18) }}
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+{# ───────────── Footer ───────────── #}
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <p class="footer__cta">Currently <em>{{ profile.availability|lower }}</em>.</p>
+      <button class="footer__up magnetic" data-to-top aria-label="Back to top" data-cursor="Top">{{ icon('up', 22) }}</button>
+    </div>
+    <div class="footer__big" aria-hidden="true" data-footer-big>{{ profile.name }}</div>
+    <div class="footer__bar">
+      <span>© {{ year }} {{ profile.name }}. Built with Flask &amp; GSAP.</span>
+      <span class="footer__time">Kerala · <span data-clock>--:--</span> IST</span>
+      <span class="footer__links">
+        <a href="{{ profile.github }}" target="_blank" rel="noopener">GitHub</a>
+        <a href="{{ profile.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="{{ resume_url }}" target="_blank" rel="noopener">Resume</a>
+      </span>
+    </div>
+  </div>
+</footer>
+{% endblock %}
