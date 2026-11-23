@@ -50,7 +50,7 @@ PROFILE = {
 }
 
 STATS = [
-    {"value": 11, "suffix": "", "label": "Projects shipped"},
+    {"value": 10, "suffix": "", "label": "Projects shipped"},
     {"value": 8, "suffix": "", "label": "User roles in Mentrix"},
     {"value": 87.11, "suffix": "%", "label": "Best model accuracy", "decimals": 2},
     {"value": 25, "suffix": "+", "label": "Technologies used"},
@@ -163,26 +163,6 @@ PROJECTS = [
         ],
         "metrics": [("87.11%", "accuracy"), ("0.87", "F1-score"), ("120K", "training images")],
         "github": "https://github.com/aashbiii/Fake-vs-Real-Image-Detection",
-    },
-    {
-        "slug": "classroom-engagement",
-        "title": "Classroom Engagement AI",
-        "subtitle": "Behaviour & Engagement Analysis with YOLO11",
-        "category": "ai",
-        "featured": False,
-        "year": "2026",
-        "icon": "scan",
-        "accent": "#ec4899",
-        "stack": ["Python", "PyTorch", "YOLO11", "OpenCV", "Gradio"],
-        "summary": "Detects hand-raising, reading, writing and phone use to score class engagement.",
-        "points": [
-            "Trained a YOLO11 model to detect behaviours such as hand-raising, reading, writing, "
-            "leaning, head-bowing and phone use.",
-            "Computed a weighted 0–100% engagement score, banded into high, medium and low.",
-            "Served live inference through an interactive Gradio web interface.",
-        ],
-        "metrics": [("6", "behaviour classes"), ("0–100", "engagement score"), ("Live", "Gradio UI")],
-        "github": "https://github.com/aashbiii/Classroom-Engagement-Detection-YOLO",
     },
     {
         "slug": "exam-engine",
