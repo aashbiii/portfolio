@@ -226,11 +226,17 @@
     <div class="work" data-work>
       {% for p in projects %}
       <article class="card tilt spotlight{% if p.featured %} card--feat{% endif %}" data-cat="{{ p.category }}" data-project="{{ p.slug }}" data-tilt style="--accent: {{ p.accent }}" tabindex="0" role="button" aria-label="Open {{ p.title }} details" data-cursor="View">
-        <div class="card__visual">
+        <div class="card__visual{% if p.shots %} card__visual--shot{% endif %}">
+          {% if p.shots %}
+          <img class="card__shot" src="{{ url_for('static', filename=p.shots[0].src) }}" alt="{{ p.shots[0].caption }}" loading="lazy" decoding="async">
+          <span class="card__badge">{{ icon(p.icon, 18) }}</span>
+          {% if p.shots|length > 1 %}<span class="card__count">{{ p.shots|length }} screenshots</span>{% endif %}
+          {% else %}
           <div class="card__art" aria-hidden="true">
             <span class="card__ring"></span><span class="card__ring card__ring--2"></span>
             <span class="card__icon">{{ icon(p.icon, 34) }}</span>
           </div>
+          {% endif %}
           <span class="card__num">{{ '%02d' % loop.index }}</span>
           <span class="card__year">{{ p.year }}</span>
         </div>
@@ -242,6 +248,11 @@
             {% for s in p.stack[:4] %}<span class="tag tag--sm">{{ s }}</span>{% endfor %}
             {% if p.stack|length > 4 %}<span class="tag tag--sm tag--more">+{{ p.stack|length - 4 }}</span>{% endif %}
           </div>
+          {% if p.github %}
+          <a class="card__repo" href="{{ p.github }}" target="_blank" rel="noopener" data-cursor="Code" data-stop>{{ icon('github', 15) }} View repository</a>
+          {% else %}
+          <span class="card__repo card__repo--off">{{ icon('code', 15) }} Private source</span>
+          {% endif %}
         </div>
         <span class="card__go">{{ icon('arrow', 18) }}</span>
         <div class="tilt__glare"></div>
@@ -263,13 +274,29 @@
         <h3 class="modal__title" id="modal-title" data-m-title></h3>
       </div>
     </div>
+    <figure class="gallery" data-m-gallery>
+      <div class="gallery__stage">
+        <a class="gallery__main" data-g-link target="_blank" rel="noopener" data-cursor="Zoom"><img data-g-img alt=""></a>
+        <button class="gallery__arrow gallery__arrow--prev" data-g-prev aria-label="Previous screenshot">←</button>
+        <button class="gallery__arrow gallery__arrow--next" data-g-next aria-label="Next screenshot">→</button>
+      </div>
+      <figcaption class="gallery__cap"><span data-g-cap></span><span class="gallery__idx" data-g-idx></span></figcaption>
+      <div class="gallery__thumbs" data-g-thumbs></div>
+    </figure>
     <div class="modal__metrics" data-m-metrics></div>
+    <h4 class="modal__h">About the project</h4>
+    <p class="modal__readme" data-m-readme></p>
     <h4 class="modal__h">What I built</h4>
     <ul class="modal__points" data-m-points></ul>
     <h4 class="modal__h">Tech stack</h4>
     <div class="modal__stack" data-m-stack></div>
     <div class="modal__foot">
-      <a class="btn btn--primary btn--sm magnetic" data-m-github target="_blank" rel="noopener"><span class="btn__fill"></span><span class="btn__txt">GitHub</span>{{ icon('github', 16) }}</a>
+      <div class="modal__links">
+        <a class="btn btn--primary btn--sm magnetic" data-m-github target="_blank" rel="noopener"><span class="btn__fill"></span><span class="btn__txt">View code</span>{{ icon('github', 16) }}</a>
+        <a class="btn btn--ghost btn--sm magnetic" data-m-readme-link target="_blank" rel="noopener"><span class="btn__txt">Full README</span>{{ icon('arrow', 14) }}</a>
+        <a class="btn btn--ghost btn--sm magnetic" data-m-live target="_blank" rel="noopener"><span class="btn__txt">Live demo</span>{{ icon('arrow', 14) }}</a>
+        <p class="modal__note" data-m-note></p>
+      </div>
       <div class="modal__nav">
         <button class="btn btn--ghost btn--sm" data-m-prev aria-label="Previous project">← Prev</button>
         <button class="btn btn--ghost btn--sm" data-m-next aria-label="Next project">Next →</button>

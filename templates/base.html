@@ -51,7 +51,7 @@
   }
   </script>
 </head>
-<body>
+<body data-static="{{ url_for('static', filename='') }}">
   {# Grain + cursor layers #}
   <div class="grain" aria-hidden="true"></div>
   <div class="cursor" aria-hidden="true"><div class="cursor__dot"></div><div class="cursor__ring"><span class="cursor__label"></span></div></div>

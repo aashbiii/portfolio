@@ -283,6 +283,151 @@ PROJECTS = [
     },
 ]
 
+# ---------------------------------------------------------------------------
+# README summaries and screenshots, taken from each project's GitHub repository.
+# Screenshots live in public/static/img/projects/<slug>-N.webp.
+# "github": None hides the repo button (the code isn't public).
+# ---------------------------------------------------------------------------
+PROJECT_DETAILS = {
+    "mentrix": {
+        "github": None,
+        "repo_note": "Built during the RLabz internship — source code is private.",
+        "readme": (
+            "Mentrix is Rajagiri College's mentor–mentee management system. Students, mentors, "
+            "department heads and administrators each get their own dashboard, sign in with a "
+            "college-only Google account, and keep every mentoring session, report and wellness "
+            "check in one place. An on-premise Llama 3.2 model suggests session topics without "
+            "any student data leaving the campus."
+        ),
+        "shots": [],
+    },
+    "smart-traffic": {
+        "readme": (
+            "A two-road smart traffic signal. A YOLOv5 model counts the vehicles waiting on each "
+            "road and the controller adjusts the green-light timer. When an emergency vehicle is "
+            "detected, the opposite road's green is cut to 5 seconds so it can pass. A PyQt5 "
+            "desktop app drives six LEDs on an Arduino UNO over serial, and a Flask REST API lets "
+            "a mobile app monitor and override the lights."
+        ),
+        "shots": [
+            ("smart-traffic-1.webp", "YOLOv5 counting mixed traffic"),
+            ("smart-traffic-2.webp", "Ambulance detected — emergency preemption"),
+            ("smart-traffic-3.webp", "Arduino LED signal hardware"),
+            ("smart-traffic-4.webp", "Android companion app (light & dark)"),
+        ],
+    },
+    "micro-grid": {
+        "readme": (
+            "An IoT energy-monitoring system for four computer labs at Rajagiri College, built by "
+            "Team PIXEL. ESP32 nodes stream voltage, current and power over MQTT; a Python core "
+            "stores the telemetry in SQLite, automatically trips a lab's relay when it sits idle "
+            "below 150 W, and forecasts the next 6 hours of demand with Gradient Boosting models."
+        ),
+        "shots": [
+            ("micro-grid-1.webp", "Live Flask dashboard for all four labs"),
+            ("micro-grid-2.webp", "Telemetry and 6-hour demand forecast"),
+        ],
+    },
+    "fake-vs-real": {
+        "readme": (
+            "A research project that detects AI-generated images (Stable Diffusion / GANs) versus "
+            "real camera photos. An ImageNet-pretrained EfficientNetB0 backbone is fine-tuned on "
+            "the 120,000-image CIFAKE benchmark with real-time augmentation, reaching 87.11% "
+            "accuracy on 20,000 unseen test images."
+        ),
+        "shots": [
+            ("fake-vs-real-1.webp", "Sample predictions on unseen images"),
+            ("fake-vs-real-2.webp", "Training and validation accuracy"),
+            ("fake-vs-real-3.webp", "Confusion matrix on the test set"),
+        ],
+    },
+    "exam-engine": {
+        "readme": (
+            "A Windows desktop exam platform: admins build MCQ exams and question banks, students "
+            "take timed tests that auto-submit when time runs out, and both sides get "
+            "question-by-question scorecards. Built with C# WinForms on .NET Framework 4.8 and "
+            "SQL Server, with SHA-256 passwords and one attempt per exam enforced in the database."
+        ),
+        "shots": [
+            ("exam-engine-1.webp", "Administrator dashboard"),
+            ("exam-engine-2.webp", "Sign-in for students and administrators"),
+            ("exam-engine-3.webp", "Student exam catalogue"),
+        ],
+    },
+    "hall-booking": {
+        "readme": (
+            "A native Android app that replaces paper requisition letters for booking halls at "
+            "Rajagiri College. Students and staff pick a hall, date and slot; clashes with pending "
+            "or approved bookings are rejected instantly, and hall managers approve or reject "
+            "requests from their own dashboard with a receipt number."
+        ),
+        "shots": [
+            ("hall-booking-1.webp", "Auditorium photos shown in the app"),
+            ("hall-booking-2.webp", "Seminar hall listing"),
+            ("hall-booking-3.webp", "Conference hall listing"),
+        ],
+    },
+    "bookify": {
+        "github": None,
+        "repo_note": "Academic project — source code not published.",
+        "readme": (
+            "BOOKIFY brings hotel, flight and train bookings into one PHP and MySQL travel portal. "
+            "Travellers sign in, book, pay and cancel in one place, while administrators manage "
+            "every booking and see revenue reports."
+        ),
+        "shots": [],
+    },
+    "placement-prediction": {
+        "readme": (
+            "A dual-objective machine-learning system built on 3,000 student profiles. It "
+            "classifies whether a student will be placed (XGBoost: 84.33% accuracy, ROC-AUC "
+            "0.925) and predicts the offered package in LPA (Ridge regression: R² 0.938), and "
+            "highlights which factors — CGPA, coding scores, internships — matter most."
+        ),
+        "metrics": [("84.33%", "placement accuracy"), ("0.925", "ROC-AUC"), ("0.938", "R² for package")],
+        "shots": [
+            ("placement-prediction-1.webp", "ROC curves — Random Forest vs XGBoost"),
+            ("placement-prediction-2.webp", "Actual vs predicted package"),
+            ("placement-prediction-3.webp", "Most important features"),
+        ],
+    },
+    "kuttystories": {
+        "readme": (
+            "KuttyStories is a Kerala photographer's portfolio and booking site built with Flask "
+            "and SQLite. Visitors browse a filterable gallery, check session pricing and request a "
+            "booking; the photographer manages bookings and the portfolio from a "
+            "password-protected studio dashboard. All data access follows Python's DB-API 2.0."
+        ),
+        "shots": [
+            ("kuttystories-1.webp", "Home page"),
+            ("kuttystories-2.webp", "Filterable portfolio gallery"),
+            ("kuttystories-3.webp", "Booking form"),
+            ("kuttystories-4.webp", "Studio admin dashboard"),
+        ],
+    },
+    "java-ecommerce": {
+        "readme": (
+            "A desktop shopping and inventory app built with Java Swing and Oracle Database 21c "
+            "over JDBC. Admins manage products, customers and orders; customers browse the "
+            "catalogue, fill a cart and track orders from pending to delivered. Checkout writes "
+            "the order, its items and the stock update in one transaction."
+        ),
+        "shots": [
+            ("java-ecommerce-1.webp", "Admin dashboard"),
+            ("java-ecommerce-2.webp", "Shop and cart"),
+            ("java-ecommerce-3.webp", "Product management"),
+            ("java-ecommerce-4.webp", "Order management"),
+        ],
+    },
+}
+
+for _p in PROJECTS:
+    _d = PROJECT_DETAILS.get(_p["slug"], {})
+    _p.update(_d)
+    _p["shots"] = [{"src": f"img/projects/{f}", "caption": c} for f, c in _d.get("shots", [])]
+    _p.setdefault("repo_note", "")
+    _p.setdefault("live", None)
+
 PROJECT_FILTERS = [
     ("all", "All"),
     ("web", "Web"),

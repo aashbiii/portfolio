@@ -130,6 +130,11 @@ body {
   overflow-x: hidden;
   transition: background-color 0.6s var(--ease), color 0.6s var(--ease);
 }
+/* Phones ignore overflow-x on <body> for the page width, so anything sliding in from the side
+   made the page wider than the screen. `clip` stops it at the page level without creating a
+   scroll container (sticky and smooth scrolling keep working). */
+html, body { max-width: 100%; overflow-x: hidden; }
+@supports (overflow: clip) { html, body, main, .footer { overflow-x: clip; } }
 body.is-loading { overflow: hidden; }
 
 img { max-width: 100%; display: block; }
@@ -710,6 +715,65 @@ html:not(.js) .meter__bar span { width: 100%; }
   .footer__top { flex-direction: row; }
   .theme-dock { right: 14px; bottom: 14px; }
   .theme-dock__toggle { width: 50px; height: 50px; }
+}
+
+/* ---------- Project screenshots on cards ---------- */
+.card__visual--shot { height: 220px; background: var(--bg-2); }
+.card__visual--shot::after { display: none; }
+.card__shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform 1.2s var(--ease), filter 0.6s var(--ease); will-change: transform; }
+.card:hover .card__shot { transform: scale(1.06); }
+.card__visual--shot::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, transparent 45%, color-mix(in srgb, var(--bg) 70%, transparent) 100%),
+              linear-gradient(120deg, color-mix(in srgb, var(--accent) 22%, transparent), transparent 55%);
+}
+.card__badge { position: absolute; left: 16px; bottom: 14px; z-index: 2; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--accent); color: #fff; box-shadow: 0 10px 30px -8px var(--accent); }
+.card__count { position: absolute; right: 16px; bottom: 16px; z-index: 2; padding: 4px 10px; border-radius: 999px; font: 500 11px var(--f-mono); color: #fff; background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(8px); }
+.card__visual--shot .card__num, .card__visual--shot .card__year { z-index: 2; color: #fff; }
+.card__visual--shot .card__num { text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6); }
+.card__visual--shot .card__year { background: rgba(0, 0, 0, 0.45); border-color: transparent; }
+.card__repo { position: relative; z-index: 5; display: inline-flex; align-items: center; gap: 7px; width: max-content; margin-top: 14px; padding-right: 54px; font: 600 13px var(--f-body); color: var(--muted); transition: color 0.3s; }
+.card__repo:hover { color: var(--text); }
+.card__repo::after { content: ""; position: absolute; left: 22px; right: 54px; bottom: -3px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 0.5s var(--ease); }
+.card__repo:hover::after { transform: scaleX(1); }
+.card__repo--off { opacity: 0.7; }
+
+/* ---------- Modal gallery ---------- */
+.gallery { position: relative; margin: 0 0 26px; }
+.gallery[hidden] { display: none; }
+.gallery__stage { position: relative; border-radius: 18px; overflow: hidden; background: var(--bg-2); border: 1px solid var(--line); aspect-ratio: 16 / 10; }
+.gallery__main { display: block; width: 100%; height: 100%; }
+.gallery__main img { width: 100%; height: 100%; object-fit: contain; background: #0b0b10; }
+.gallery__arrow { position: absolute; top: 50%; translate: 0 -50%; z-index: 2; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; font-size: 18px; color: #fff; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.18); transition: background-color 0.3s, transform 0.4s var(--ease); }
+.gallery__arrow:hover { background: var(--accent-m); transform: scale(1.08); }
+.gallery__arrow--prev { left: 12px; }
+.gallery__arrow--next { right: 12px; }
+.gallery__arrow[hidden] { display: none; }
+.gallery__cap { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; font-size: 13px; color: var(--muted); }
+.gallery__idx { font-family: var(--f-mono); }
+.gallery__thumbs { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.gallery__thumb { flex: none; width: 84px; aspect-ratio: 16 / 10; border-radius: 10px; overflow: hidden; border: 2px solid transparent; opacity: 0.55; transition: opacity 0.3s, border-color 0.3s, transform 0.4s var(--ease); }
+.gallery__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.gallery__thumb:hover { opacity: 0.9; transform: translateY(-2px); }
+.gallery__thumb.is-active { opacity: 1; border-color: var(--accent-m); }
+.modal__readme { color: var(--muted); margin-bottom: 30px; font-size: 15.5px; }
+.modal__links { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.modal__links [hidden] { display: none; }
+.modal__note { width: 100%; font-size: 13px; color: var(--muted); }
+.modal__note:empty { display: none; }
+
+/* ---------- Premium extras ---------- */
+.reveal-title.is-split { overflow: hidden; padding-bottom: 0.08em; }
+.reveal-title .char { will-change: transform, opacity; }
+.section { overflow-x: clip; }
+.sec-progress { position: absolute; left: var(--pad); right: var(--pad); top: 0; height: 1px; background: var(--grad); transform-origin: left; transform: scaleX(0); opacity: 0.6; pointer-events: none; max-width: calc(var(--maxw) - 2 * var(--pad)); margin: 0 auto; }
+.work, .bento, .marquee__row { will-change: transform; }
+
+@media (max-width: 640px) {
+  .card__visual--shot { height: 200px; }
+  .gallery__arrow { width: 36px; height: 36px; }
+  .gallery__thumb { width: 68px; }
+  .modal__links .btn { flex: 1 1 auto; }
 }
 
 /* ---------- Reduced motion ---------- */

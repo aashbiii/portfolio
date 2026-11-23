@@ -437,7 +437,13 @@
     });
   }
 
-  /* ---------- Scroll-driven reveals ---------- */
+  /* ---------- Scroll-driven reveals ----------
+     Every reveal plays when scrolling down and rewinds when scrolling back up
+     (toggleActions "play none none reverse"), and the scroll-linked ones (scrub)
+     follow the scrollbar both ways. */
+  const REV = "play none none reverse";
+  const isMobile = () => window.innerWidth < 861;
+
   function setupReveals() {
     if (!motion || !ST) {
       // No motion: still fill meters/counters at their final value.
@@ -448,80 +454,163 @@
       return;
     }
 
-    // Section titles: wrap in a line mask and rise up char by char
+    // Section titles: letters rise out of a mask, one after another
     $$(".reveal-title").forEach((el) => {
-      const html = el.innerHTML;
-      el.innerHTML = `<span class="line"><span class="rt">${html}</span></span>`;
-      G.from($(".rt", el), { yPercent: 110, duration: 1.3, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 88%" } });
+      const chars = splitChars(el);
+      el.classList.add("is-split");
+      G.fromTo(chars,
+        { yPercent: 115, rotate: 8, opacity: 0 },
+        { yPercent: 0, rotate: 0, opacity: 1, duration: 1.1, stagger: 0.035, ease: "expo.out",
+          scrollTrigger: { trigger: el, start: "top 88%", toggleActions: REV } });
     });
 
     $$("[data-split]").forEach((el) => {
       const chars = splitChars(el);
-      G.from(chars, { yPercent: 120, rotate: 6, duration: 1.2, stagger: 0.03, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 88%" } });
+      G.fromTo(chars,
+        { yPercent: 120, rotate: 6 },
+        { yPercent: 0, rotate: 0, duration: 1.2, stagger: 0.03, ease: "expo.out",
+          scrollTrigger: { trigger: el, start: "top 88%", toggleActions: REV } });
+    });
+
+    // Index numbers next to titles draw a line in
+    $$(".sec-head__idx").forEach((el) => {
+      G.fromTo(el, { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.9, ease: "expo.out",
+        scrollTrigger: { trigger: el, start: "top 90%", toggleActions: REV } });
     });
 
     $$(".reveal").forEach((el) => {
-      G.from(el, { y: 40, opacity: 0, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 90%" } });
+      G.fromTo(el, { y: 40, opacity: 0, filter: "blur(8px)" },
+        { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.2, ease: "expo.out",
+          scrollTrigger: { trigger: el, start: "top 90%", toggleActions: REV } });
     });
 
     $$(".reveal-stagger").forEach((el) => {
-      G.from(el.children, { y: 30, opacity: 0, duration: 1, stagger: 0.08, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 88%" } });
+      G.fromTo(el.children, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, stagger: 0.08, ease: "expo.out",
+        scrollTrigger: { trigger: el, start: "top 88%", toggleActions: REV } });
     });
 
-    ST.batch(".reveal-card, .stat", {
-      start: "top 90%",
-      onEnter: (els) => G.fromTo(els, { y: 60, opacity: 0, scale: 0.97 }, { y: 0, opacity: 1, scale: 1, duration: 1.1, stagger: 0.09, ease: "expo.out", overwrite: true }),
+    // Cards, stats and panels: rise, un-blur and settle — staggered across each row
+    $$(".reveal-card, .stat").forEach((el) => {
+      const sibs = Array.from(el.parentElement.children);
+      const delay = (sibs.indexOf(el) % 4) * 0.08;
+      G.fromTo(el, { y: 70, opacity: 0, scale: 0.96, filter: "blur(6px)" },
+        { y: 0, opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.1, delay, ease: "expo.out",
+          scrollTrigger: { trigger: el, start: "top 92%", toggleActions: REV } });
     });
-    G.set(".reveal-card, .stat", { opacity: 0 });
 
-    ST.batch(".card", {
-      start: "top 92%",
-      onEnter: (els) => G.fromTo(els, { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, stagger: 0.08, ease: "expo.out", clearProps: "y,opacity" }),
+    // Skill chips pop in one by one
+    $$(".bento__chips").forEach((el) => {
+      G.fromTo(el.children, { y: 16, opacity: 0, scale: 0.8 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.6, stagger: 0.035, ease: "back.out(2)",
+          scrollTrigger: { trigger: el, start: "top 92%", toggleActions: REV } });
     });
-    G.set(".card", { opacity: 0 });
 
+    // Project cards: rise in, and their screenshot opens like a shutter
+    $$(".card").forEach((card) => {
+      const sibs = cards.filter((c) => !c.classList.contains("is-hidden"));
+      const cols = isMobile() ? 1 : window.innerWidth < 1081 ? 2 : 3;
+      const delay = (sibs.indexOf(card) % cols) * 0.1;
+      const tl = G.timeline({ scrollTrigger: { trigger: card, start: "top 92%", toggleActions: REV } });
+      tl.fromTo(card, { y: 90, opacity: 0, rotateX: -12, transformPerspective: 1000 },
+        { y: 0, opacity: 1, rotateX: 0, duration: 1.2, delay, ease: "expo.out" });
+      const vis = $(".card__visual", card);
+      if (vis) tl.fromTo(vis, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.1, ease: "expo.inOut" }, delay + 0.1);
+      const shot = $(".card__shot", card);
+      if (shot) tl.fromTo(shot, { scale: 1.35 }, { scale: 1, duration: 1.4, ease: "expo.out" }, delay + 0.15);
+    });
+
+    // Education timeline: cards slide in from their side (straight up on phones — never sideways,
+    // so nothing pokes past the screen edge)
     $$(".reveal-side").forEach((el, i) => {
-      const fromX = window.innerWidth > 860 ? (i % 2 === 0 ? 60 : -60) : 40;
-      G.from(el.querySelector(".timeline__card"), { x: fromX, opacity: 0, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 85%" } });
-      G.from(el.querySelector(".timeline__node"), { scale: 0, duration: 0.8, ease: "back.out(2)", scrollTrigger: { trigger: el, start: "top 80%" } });
+      const from = isMobile() ? { y: 50 } : { x: i % 2 === 0 ? 70 : -70 };
+      G.fromTo(el.querySelector(".timeline__card"), { ...from, opacity: 0 },
+        { x: 0, y: 0, opacity: 1, duration: 1.2, ease: "expo.out",
+          scrollTrigger: { trigger: el, start: "top 85%", toggleActions: REV } });
+      G.fromTo(el.querySelector(".timeline__node"), { scale: 0 }, { scale: 1, duration: 0.8, ease: "back.out(2)",
+        scrollTrigger: { trigger: el, start: "top 80%", toggleActions: REV } });
     });
 
-    // Statement: words light up as you scroll
+    // Statement: words light up as you scroll (and dim again going back)
     $$("[data-words]").forEach((el) => {
       const words = splitWords(el);
       G.to(words, { opacity: 1, stagger: 0.1, ease: "none", scrollTrigger: { trigger: el, start: "top 80%", end: "bottom 45%", scrub: 0.6 } });
     });
 
-    // Counters
+    // Counters count up — and back down when you scroll above them
     $$("[data-count]").forEach((el) => {
       const end = parseFloat(el.dataset.count), dec = +el.dataset.decimals || 0, o = { v: 0 };
-      G.to(o, { v: end, duration: 2.2, ease: "power3.out", scrollTrigger: { trigger: el, start: "top 90%" }, onUpdate: () => { el.textContent = o.v.toFixed(dec); } });
+      G.to(o, { v: end, duration: 2.2, ease: "power3.out", onUpdate: () => { el.textContent = o.v.toFixed(dec); },
+        scrollTrigger: { trigger: el, start: "top 90%", toggleActions: REV } });
     });
 
     // Language meters
     $$("[data-meter]").forEach((el) => {
-      G.to(el, { width: el.dataset.meter + "%", duration: 1.8, ease: "expo.out", scrollTrigger: { trigger: el, start: "top 92%" } });
+      G.fromTo(el, { width: "0%" }, { width: el.dataset.meter + "%", duration: 1.8, ease: "expo.out",
+        scrollTrigger: { trigger: el, start: "top 92%", toggleActions: REV } });
     });
 
     // Timeline line draws with scroll
     const fill = $("[data-timeline-fill]");
     if (fill) G.to(fill, { scaleY: 1, ease: "none", scrollTrigger: { trigger: "[data-timeline]", start: "top 70%", end: "bottom 60%", scrub: 0.5 } });
 
+    // About photo: opens like a curtain, then drifts with the scroll
+    const photo = $(".about__photo");
+    if (photo) {
+      G.fromTo(photo, { clipPath: "inset(18% 18% 18% 18% round 28px)" },
+        { clipPath: "inset(0% 0% 0% 0% round 28px)", ease: "none",
+          scrollTrigger: { trigger: photo, start: "top 95%", end: "top 35%", scrub: 0.8 } });
+      G.fromTo(".about__photo img", { yPercent: -4, scale: 1.25 }, { yPercent: 4, scale: 1.1, ease: "none",
+        scrollTrigger: { trigger: photo, start: "top bottom", end: "bottom top", scrub: true } });
+    }
+
     // Parallax images
     $$("[data-parallax]").forEach((el) => {
       G.to(el, { yPercent: parseFloat(el.dataset.parallax) * -100, ease: "none", scrollTrigger: { trigger: el.closest("section"), start: "top top", end: "bottom top", scrub: true } });
     });
-    if ($(".about__photo")) G.fromTo(".about__photo img", { yPercent: -4 }, { yPercent: 4, ease: "none", scrollTrigger: { trigger: ".about__photo", start: "top bottom", end: "bottom top", scrub: true } });
 
     // Experience watermark drift
     if ($(".xp")) G.fromTo(".xp__mark", { xPercent: 20 }, { xPercent: -10, ease: "none", scrollTrigger: { trigger: ".xp", start: "top bottom", end: "bottom top", scrub: true } });
 
-    // Footer name slides in
+    // Footer name: letters rise in a wave as the footer arrives
     const big = $("[data-footer-big]");
-    if (big) G.fromTo(big, { xPercent: 12, opacity: 0.2 }, { xPercent: 0, opacity: 1, ease: "none", scrollTrigger: { trigger: ".footer", start: "top bottom", end: "bottom bottom", scrub: 0.6 } });
+    if (big) {
+      const chars = splitChars(big);
+      G.fromTo(chars, { yPercent: 100, opacity: 0 }, { yPercent: 0, opacity: 1, stagger: 0.04, ease: "power2.out",
+        scrollTrigger: { trigger: ".footer", start: "top bottom", end: "bottom bottom", scrub: 0.8 } });
+    }
 
-    // Hero fades/scales out as you leave it
-    if ($(".hero__grid")) G.to(".hero__grid", { yPercent: 14, opacity: 0.2, ease: "none", scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+    // Hero: the name drifts apart and the visual sinks as you scroll away (rewinds on the way back)
+    if ($(".hero__grid")) {
+      const st = { trigger: ".hero", start: "top top", end: "bottom top", scrub: true };
+      G.to(".hero__copy", { yPercent: 18, opacity: 0.1, ease: "none", scrollTrigger: st });
+      G.to(".hero__visual", { yPercent: 10, scale: 0.92, opacity: 0.3, ease: "none", scrollTrigger: { ...st } });
+      // Uses y / xPercent so it never fights the intro animation (which uses yPercent / rotate).
+      // The hero letters are split here because the intro runs after this setup.
+      $$("[data-hero-split]").flatMap(splitChars).forEach((c, i) => {
+        G.to(c, { y: -(40 + (i % 3) * 35), xPercent: (i % 2 ? 1 : -1) * (8 + (i % 4) * 6), ease: "none", scrollTrigger: { ...st } });
+      });
+    }
+
+    // Scroll-velocity skew on the project grid, skills and marquee — gives the page weight
+    const skewTargets = $$(".work, .bento, .marquee__row");
+    if (skewTargets.length && !isMobile()) {
+      const setters = skewTargets.map((el) => G.quickTo(el, "skewY", { duration: 0.5, ease: "power3" }));
+      ST.create({
+        onUpdate(self) {
+          const v = G.utils.clamp(-4, 4, self.getVelocity() / -500);
+          setters.forEach((s) => s(v));
+        },
+      });
+      ST.addEventListener("scrollEnd", () => setters.forEach((s) => s(0)));
+    }
+
+    // Section progress: a thin accent line grows under each section title while you read it
+    $$(".section").forEach((sec) => {
+      const line = document.createElement("span");
+      line.className = "sec-progress";
+      sec.appendChild(line);
+      G.fromTo(line, { scaleX: 0 }, { scaleX: 1, ease: "none", scrollTrigger: { trigger: sec, start: "top 60%", end: "bottom 60%", scrub: true } });
+    });
   }
 
   /* ---------- Project filter (Flip layout animation) ---------- */
@@ -541,7 +630,12 @@
       filterBtns.forEach((b) => { b.classList.toggle("is-active", b === btn); b.setAttribute("aria-selected", b === btn ? "true" : "false"); });
       moveFilterPill(btn);
       // Cards not yet scroll-revealed would otherwise stay invisible after re-layout.
-      if (G) { G.killTweensOf(cards); G.set(cards, { clearProps: "opacity,y" }); }
+      if (G) {
+        if (ST) ST.getAll().forEach((t) => { if (cards.includes(t.trigger)) t.kill(true); });
+        G.killTweensOf(cards);
+        G.set(cards, { clearProps: "opacity,y,rotateX,transform" });
+        $$(".card__visual, .card__shot").forEach((el) => G.set(el, { clearProps: "clipPath,transform" }));
+      }
       const state = Flip && motion ? Flip.getState(cards) : null;
       cards.forEach((c) => c.classList.toggle("is-hidden", f !== "all" && c.dataset.cat !== f));
       if (state) {
@@ -567,6 +661,32 @@
 
   function visibleSlugs() { return cards.filter((c) => !c.classList.contains("is-hidden")).map((c) => c.dataset.project); }
 
+  const staticBase = document.body.dataset.static || "/static/";
+  let gallery = { shots: [], i: 0 };
+
+  function showShot(i, dir = 1) {
+    const g = $("[data-m-gallery]", modal);
+    const n = gallery.shots.length;
+    if (!n) return;
+    gallery.i = (i + n) % n;
+    const shot = gallery.shots[gallery.i];
+    const img = $("[data-g-img]", g);
+    const url = staticBase + shot.src;
+    const swap = () => {
+      img.src = url;
+      img.alt = shot.caption;
+      $("[data-g-link]", g).href = url;
+      $("[data-g-cap]", g).textContent = shot.caption;
+      $("[data-g-idx]", g).textContent = n > 1 ? `${gallery.i + 1} / ${n}` : "";
+      $$(".gallery__thumb", g).forEach((t, k) => t.classList.toggle("is-active", k === gallery.i));
+    };
+    if (motion && img.getAttribute("src")) {
+      G.timeline()
+        .to(img, { xPercent: -8 * dir, opacity: 0, duration: 0.25, ease: "power2.in", onComplete: swap })
+        .fromTo(img, { xPercent: 8 * dir, opacity: 0, scale: 1.04 }, { xPercent: 0, opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" });
+    } else swap();
+  }
+
   function fillModal(p) {
     const panel = $(".modal__panel", modal);
     panel.style.setProperty("--accent-m", p.accent);
@@ -575,14 +695,33 @@
     $("[data-m-sub]", modal).textContent = `${p.subtitle} · ${p.year}`;
     $("[data-m-title]", modal).textContent = p.title;
     $("[data-m-metrics]", modal).innerHTML = (p.metrics || []).map((m) => `<div class="metric"><strong>${m[0]}</strong><span>${m[1]}</span></div>`).join("");
+    $("[data-m-readme]", modal).textContent = p.readme || p.summary;
     const ul = $("[data-m-points]", modal);
     ul.innerHTML = "";
     p.points.forEach((t) => { const li = document.createElement("li"); li.textContent = t; ul.appendChild(li); });
     $("[data-m-stack]", modal).innerHTML = p.stack.map((s) => `<span class="tag">${s}</span>`).join("");
-    $("[data-m-github]", modal).href = p.github;
+
+    // Links
+    const gh = $("[data-m-github]", modal), rd = $("[data-m-readme-link]", modal), live = $("[data-m-live]", modal);
+    gh.hidden = rd.hidden = !p.github;
+    if (p.github) { gh.href = p.github; rd.href = p.github + "#readme"; }
+    live.hidden = !p.live;
+    if (p.live) live.href = p.live;
+    $("[data-m-note]", modal).textContent = p.github ? "" : (p.repo_note || "Source code is private.");
+
+    // Screenshot gallery
+    const g = $("[data-m-gallery]", modal);
+    gallery = { shots: p.shots || [], i: 0 };
+    g.hidden = !gallery.shots.length;
+    $("[data-g-img]", g).removeAttribute("src");
+    const multi = gallery.shots.length > 1;
+    $$(".gallery__arrow", g).forEach((b) => (b.hidden = !multi));
+    $("[data-g-thumbs]", g).innerHTML = multi
+      ? gallery.shots.map((s, k) => `<button class="gallery__thumb" data-g-thumb="${k}" aria-label="Show ${s.caption}"><img src="${staticBase + s.src}" alt="" loading="lazy"></button>`).join("")
+      : "";
+    showShot(0);
     panel.scrollTop = 0;
   }
-
   function openModal(slug) {
     const idx = projects.findIndex((p) => p.slug === slug);
     if (idx < 0) return;
@@ -639,6 +778,16 @@
     });
     $$("[data-modal-close]", modal).forEach((b) => b.addEventListener("click", closeModal));
     $("[data-m-prev]", modal).addEventListener("click", () => step(-1));
+    $("[data-g-prev]", modal).addEventListener("click", () => showShot(gallery.i - 1, -1));
+    $("[data-g-next]", modal).addEventListener("click", () => showShot(gallery.i + 1, 1));
+    $("[data-g-thumbs]", modal).addEventListener("click", (e) => {
+      const t = e.target.closest("[data-g-thumb]");
+      if (t) { const k = +t.dataset.gThumb; showShot(k, k >= gallery.i ? 1 : -1); }
+    });
+    $$("[data-stop]").forEach((a) => {
+      a.addEventListener("click", (e) => e.stopPropagation());
+      a.addEventListener("keydown", (e) => e.stopPropagation());
+    });
     $("[data-m-next]", modal).addEventListener("click", () => step(1));
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") { closeModal(); closeMenu(); dock && dock.classList.remove("is-open"); }
