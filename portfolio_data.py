@@ -120,7 +120,7 @@ PROJECTS = [
             "Supervisory desktop simulator shows road state, countdown timers and vehicle tallies.",
         ],
         "metrics": [("9600", "baud serial link"), ("3", "emergency classes"), ("4", "system tiers")],
-        "github": "https://github.com/aashbiii",
+        "github": "https://github.com/aashbiii/AI-Traffic-Controller-Emergency-Preemption",
     },
     {
         "slug": "micro-grid",
@@ -142,7 +142,7 @@ PROJECTS = [
             "analytics view with energy and CO₂ savings audit trails.",
         ],
         "metrics": [("4", "labs monitored"), ("150 W", "idle threshold"), ("6 h", "forecast horizon")],
-        "github": "https://github.com/aashbiii",
+        "github": "https://github.com/aashbiii/Campus-Microgrid-IoT-Optimization",
     },
     {
         "slug": "fake-vs-real",
@@ -162,7 +162,7 @@ PROJECTS = [
             "Completed training in under 30 minutes of GPU time.",
         ],
         "metrics": [("87.11%", "accuracy"), ("0.87", "F1-score"), ("120K", "training images")],
-        "github": "https://github.com/aashbiii",
+        "github": "https://github.com/aashbiii/Fake-vs-Real-Image-Detection",
     },
     {
         "slug": "classroom-engagement",
@@ -182,7 +182,7 @@ PROJECTS = [
             "Served live inference through an interactive Gradio web interface.",
         ],
         "metrics": [("6", "behaviour classes"), ("0–100", "engagement score"), ("Live", "Gradio UI")],
-        "github": "https://github.com/aashbiii",
+        "github": "https://github.com/aashbiii/Classroom-Engagement-Detection-YOLO",
     },
     {
         "slug": "exam-engine",
@@ -203,7 +203,7 @@ PROJECTS = [
             "instant question-wise scorecards.",
         ],
         "metrics": [("2", "user roles"), ("SHA-256", "hashing"), ("40", "seeded MCA questions")],
-        "github": "https://github.com/aashbiii",
+        "github": "https://github.com/aashbiii/Networked-Exam-Engine",
     },
     {
         "slug": "hall-booking",
@@ -223,7 +223,7 @@ PROJECTS = [
             "review requests and edit hall details.",
         ],
         "metrics": [("5", "auditoriums"), ("11", "departments"), ("3", "daily slots")],
-        "github": "https://github.com/aashbiii",
+        "github": "https://github.com/aashbiii/HallBookingSystem",
     },
     {
         "slug": "bookify",
@@ -261,7 +261,7 @@ PROJECTS = [
             "Regression: salary package in LPA evaluated with MAE, MSE and R².",
         ],
         "metrics": [("2", "prediction tasks"), ("3,000", "student records"), ("5-fold", "cross-validation")],
-        "github": "https://github.com/aashbiii",
+        "github": "https://github.com/aashbiii/Campus-Placement-Prediction-ML",
     },
     {
         "slug": "kuttystories",
@@ -280,7 +280,7 @@ PROJECTS = [
             "Pure DB-API 2.0 data layer with parameterised queries, commits and rollbacks.",
         ],
         "metrics": [("CRUD", "bookings & gallery"), ("ACID", "transactions"), ("4", "booking states")],
-        "github": "https://github.com/aashbiii",
+        "github": "https://github.com/aashbiii/photobooking",
     },
     {
         "slug": "java-ecommerce",
@@ -299,7 +299,7 @@ PROJECTS = [
             "Admin inventory control and detailed order history with delivery status.",
         ],
         "metrics": [("Oracle", "21c database"), ("6+", "app modules"), ("Swing", "Nimbus UI")],
-        "github": "https://github.com/aashbiii",
+        "github": "https://github.com/aashbiii/ECommerceSystem",
     },
 ]
 

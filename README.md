@@ -1,5 +1,9 @@
 # Ashbi Saju — Portfolio
 
+**Live site: https://aashbiii.github.io/portfolio/**
+
+<p align="center"><img src="docs/screenshot.jpg" width="85%" alt="Portfolio hero section" /></p>
+
 A premium, animated personal portfolio built with **Flask**, styled with hand-written CSS and animated with **GSAP (ScrollTrigger + Flip)** and **Lenis** smooth scrolling. Ready to deploy on **Vercel**.
 
 ## Features
@@ -18,7 +22,7 @@ All text lives in **`portfolio_data.py`**: profile, stats, experience, projects,
 
 - Resume PDF: `public/static/files/Ashbi_Saju_Resume.pdf` (served at `/resume`, and `/resume?download=1` downloads it)
 - Images: `public/static/img/` (`about.webp` = hero cut-out, `hero.webp` = about photo, `og.png` = social preview)
-- Each project's `github` link currently points to the GitHub profile. Change it to the repo URL.
+- Each project's `github` field links to its repository.
 
 ## Run locally
 
